@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TeaMachine
 TEMPLATE = app
 
+CONFIG += c++14
+
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which has been marked as deprecated (the exact warnings
 # depend on your compiler). Please consult the documentation of the
@@ -28,12 +30,14 @@ SOURCES += \
         createteadialog.cpp \
         main.cpp \
         tea.cpp \
-	teamachineengine.cpp
+	teamachineengine.cpp \
+    teasettings.cpp
 
 HEADERS += \
         createteadialog.h \
         tea.h \
-	teamachineengine.h
+	teamachineengine.h \
+    teasettings.h
 
 FORMS += \
         createteadialog.ui

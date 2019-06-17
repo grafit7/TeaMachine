@@ -2,9 +2,15 @@
 
 #include <QTimerEvent>
 
+#ifdef QT_DEBUG
+const int cMilisecondsInMinute = 10000;
+#else
+const int cMilisecondsInMinute = 60000;
+#endif
+
 Tea::Tea(const QString &title, const QString &description, int minutes, int timerIdentifier,
          QObject *parent)
-    : QObject(parent)
+    :QObject(parent)
     ,mTitle{title}
     ,mDescription{description}
     ,mTimeInMinutes{minutes}
@@ -58,7 +64,7 @@ int Tea::timerIdentifier() const
 
 void Tea::makeTea()
 {
-    mTimerIdentifier = startTimer(mTimeInMinutes*60000);
+    mTimerIdentifier = startTimer(mTimeInMinutes * cMilisecondsInMinute);
 }
 
 void Tea::timerEvent(QTimerEvent *event)

@@ -17,11 +17,13 @@ public:
     explicit TeaMachineEngine(const QIcon &icon, QObject *parent = nullptr);
     ~TeaMachineEngine() override;
     void run();
+    void refreshTeaMenu();
 
 private slots:
     void pushTea(Tea *tea);
     void makeTea(QAction * action);
     void processTrayIconClick(QSystemTrayIcon::ActivationReason reason);
+    void saveSettings();
 
 private:
     CreateTeaDialog *mCreateTeaDialog;

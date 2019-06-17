@@ -1,6 +1,7 @@
 #include "teamachineengine.h"
 #include "createteadialog.h"
 #include "tea.h"
+#include "teasettings.h"
 
 #include <QSystemTrayIcon>
 #include <QApplication>
@@ -13,9 +14,16 @@ TeaMachineEngine::TeaMachineEngine(const QIcon &icon, QObject *parent)
     ,mAddTeaAction{new QAction(QObject::tr("&Add Tea"), this)}
     ,mTeaMenu{new QMenu(QObject::tr("&Teas"), nullptr)}
 {
+    TeaSettings lTeaSettings;
+    auto listTeas = lTeaSettings.listOfTeas();
+    for(auto a : listTeas)
+    {
+        pushTea(a);
+    }
     connect(mTeaMenu, &QMenu::triggered,this,&TeaMachineEngine::makeTea);
     connect(mAddTeaAction, &QAction::triggered, mCreateTeaDialog, &CreateTeaDialog::show);
     connect(mCreateTeaDialog, &CreateTeaDialog::teaCreated, this, &TeaMachineEngine::pushTea);
+    connect(mCreateTeaDialog, &CreateTeaDialog::teaCreated, this, &TeaMachineEngine::saveSettings);
 }
 
 TeaMachineEngine::~TeaMachineEngine()
@@ -38,6 +46,15 @@ void TeaMachineEngine::run()
     {
         mTrayIcon->setContextMenu(trayIconMenu);
         mTrayIcon->show();
+    }
+}
+
+void TeaMachineEngine::refreshTeaMenu()
+{
+    mTeaMenu->clear();
+    for(auto tempTea : mTeas)
+    {
+        mTeaMenu->addAction(new QAction(tempTea->title(),this));
     }
 }
 
@@ -73,4 +90,10 @@ void TeaMachineEngine::processTrayIconClick(QSystemTrayIcon::ActivationReason re
     {
         mTeaMenu->setEnabled(mTeas.size() >= 1);
     }
+}
+
+void TeaMachineEngine::saveSettings()
+{
+    TeaSettings lTeaSettings;
+    lTeaSettings.saveListOfTeas(mTeas);
 }
